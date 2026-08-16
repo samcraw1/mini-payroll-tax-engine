@@ -73,5 +73,17 @@ app.post('/api/chat', async (request, response) => {
     }
 });
 
+app.post('/api/employees', (request, response) => {
+    const {name,salary,position,state} = request.body;
+
+    db.query('insert into employees (name,salary,position,state) values (?,?,?,?)', [name,salary,position,state], (error, results) => {
+        if(error){
+            return response.status(500).json({error: error.message});
+        } else {
+            response.status(201).json({message: 'Employee added successfully', employeeId: results.insertId});
+        }
+    });
+});
+
 
 

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { execFile } = require('child_process');
 const mysql = require('mysql2');
+const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 
 const app = express();
 app.use(cors());
@@ -46,4 +47,31 @@ db.connect(error =>  {
 });
 
 app.listen(3000, () => console.log('Server is running on port 3000'));
+
+const bedrock = new BedrockRuntimeClient({ region: 'us-east-1' });
+
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        const command = new InvokeModelCommand({
+            modelId: 'anthropic.claude-3-haiku-20240307-v1:0',
+            contentType: 'application/json',
+            body: JSON.stringify({
+                anthropic_version: 'bedrock-2023-05-31',
+                max_tokens: 1024,
+                messages: [{ role: 'user', content: message }]
+            })
+        });
+
+        const response = await bedrock.send(command);
+        const result = JSON.parse(new TextDecoder().decode(response.body));
+
+        res.json({ reply: result.content[0].text });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 

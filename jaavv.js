@@ -79,47 +79,86 @@ taxi.driver.name = 'Jane Smith';
 console.log(taxi.driver.name);
 
 
-let animal = {
-    constructor:function(species) {
-        this.species = species;
+let coffee = {
+    constructor: function(type, ounces) {
+        this.type = type;
+        this.ounces = ounces;
+    }
+    toStirng() {
+        return `${this.ounces} oz ${this.type}`;
     }
 }
 
-
-const animalList = [
-    new animal.constructor('Dog'),
-    new animal.constructor('Cat'),
-    new animal.constructor('Bird')
-]
-
-
-animalList[0].roof = function() {
-    console.log('This animal has a roof');
+function makeCoffee(type, ounces) {
+    if (ounces === 8){
+        console.log('small coffee');
+    } else if(ounces === 12) {
+        console.log('medium coffee');
+    } else if(ounces === 16) {
+        console.log('large coffee');
+    } else {
+        console.log('invalid size');
+    }
 }
 
-animalList[1].meow = function(){
-    console.log('Meow');
+function makeCoffee(type, ounces) {
+    switch(ounces){
+        case 8: 
+            console.log('small coffee');
+            break;
+        case 12:
+            console.log('medium coffee')
+            break;
+        case 16:
+            console.log('large coffee');
+            break;
+        default:
+            console.log('invalid size');
+            
+    }
 }
 
+makeCoffee('latte', 12);
+
+let coffee = new Coffee('latte', 12);
+console.log(coffee.toString());
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-for (let i = 0; i < animalList.length; i++) {
-    console.log(animalList[i]);
+class Coffee {
+    static counter = 0;
+    constructor(type, ounces){
+        this.type = type;
+        this.ounces = ounces;
+        this.shopName = 'JavaVv';
+        counter++;
+    }
 }
 
-for (const animalName of animalList) {
-    console.log(animalName);
-}
+let coffee1 = new Coffee('latte', 12);
+
+console.log(coffee1.counter++); 
+
+
+const http = require("http");
+
+
+http.createServer((request, response)=> {
+    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.write('Hello World');
+    response.end();
+}).listen(3000);
+
+console.log('Server running at http://localhost:3000/');
+})
+
+
+
+
+
+
+
+
+
+
+
 

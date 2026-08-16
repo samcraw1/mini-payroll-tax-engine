@@ -50,9 +50,9 @@ app.listen(3000, () => console.log('Server is running on port 3000'));
 
 const bedrock = new BedrockRuntimeClient({ region: 'us-east-1' });
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', async (request, response) => {
     try {
-        const { message } = req.body;
+        const { message } = request.body;
 
         const command = new InvokeModelCommand({
             modelId: 'anthropic.claude-3-haiku-20240307-v1:0',
@@ -64,12 +64,12 @@ app.post('/api/chat', async (req, res) => {
             })
         });
 
-        const response = await bedrock.send(command);
-        const result = JSON.parse(new TextDecoder().decode(response.body));
+        const bedrockResponse = await bedrock.send(command);
+        const result = JSON.parse(new TextDecoder().decode(bedrockResponse.body));
 
-        res.json({ reply: result.content[0].text });
+        response.json({ reply: result.content[0].text });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        response.status(500).json({ error: error.message });
     }
 });
 

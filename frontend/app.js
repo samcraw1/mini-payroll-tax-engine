@@ -90,5 +90,33 @@ chatForm.addEventListener('submit', (event) => {
         });
 });
 
+const addEmployeeForm = document.getElementById('add-employee-form');
+addEmployeeForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById('employee-name').value;
+    const salary = document.getElementById('employee-salary').value;
+    const position = document.getElementById('employee-position').value;
+    const state = document.getElementById('employee-state').value;
+    
+    fetch('http://localhost:3000/api/employees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, salary, position, state })
+    })
+            
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            addEmployeeForm.reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error adding employee. please try again.');
+        });
+});
+
 
 

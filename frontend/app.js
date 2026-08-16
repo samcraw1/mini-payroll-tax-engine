@@ -62,3 +62,33 @@ form.addEventListener('submit', (event) => {
         });
 });
 
+const chatForm = document.getElementById('chat-form');
+const chatMessages = document.getElementById('chat-messages');
+
+chatForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const chatInput = document.getElementById('chat-input');
+    const message = chatInput.value;
+    chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+    chatInput.value = '';
+
+    fetch('http://localhost:3000/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message })
+    })
+        .then(response => response.json())
+        .then(data => {
+            chatMessages.innerHTML += `<p><strong>Bot:</strong> ${data.reply}</p>`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatMessages.innerHTML += `<p><strong>Bot:</strong> Error getting response.</p>`;
+        });
+});
+
+
+

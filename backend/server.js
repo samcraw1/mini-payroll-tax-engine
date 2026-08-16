@@ -1,25 +1,28 @@
 const express = require('express');
 const cors = require('cors');
 const { execFile } = require('child_process');
+const mysql = require('mysql2');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-app.get('/api/employees', (request, response) => {
-    response.json(employees);
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'payroll'
 });
 
 
 
-
-const employees = [
-    {id: 101, name: 'John Doe', position: 'Software Engineer', salary: 80000},
-    {id: 102, name: 'Jane Smith', position: 'Product Manager', salary: 95000},
-    {id: 103, name: 'Alice Johnson', position: 'UX Designer', salary: 70000},
-    {id: 104, name: 'Bob Brown', position: 'Data Scientist', salary: 120000}
-];
+app.get('/api/employees', (request, response) => {
+  db.query('select * from employees', (error, results) => {
+    if (error) {
+        return response.status(500).json({error: error.message});
+    }
+    response.json(results);
+  });
+});
 
 app.post('/api/calculate', (request, response) => {
     const { gross_pay } = request.body;
@@ -32,6 +35,14 @@ app.post('/api/calculate', (request, response) => {
 
     });
 
+});
+db.connect(error =>  { 
+    if(error) {
+        console.log('Error connecting to the database:', error.message);
+        return;
+
+    }
+    console.log('Connected to the database');
 });
 
 app.listen(3000, () => console.log('Server is running on port 3000'));

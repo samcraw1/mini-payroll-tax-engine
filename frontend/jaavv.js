@@ -14,6 +14,26 @@ const projected = employees.map(emp => {
     }
 })
 
+const highEarners = employees.filter(emp => emp.salary > 90000);
+
+const names = highEarners.map(emp => emp.name);
+
+console.log(names, highEarners);
+
+const filteredEmployees = employees.filter(emp => emp.salary < 90000);'
+
+const filteredEmployees2 = employees.filter(emp => emp.name.includes('J'));
+
+console.log(filteredEmployees2);
+
+
+employees.forEach(emp => console.log(emp.name));
+
+
+
+console.log(filteredEmployees);
+
 console.log(projected[0].salary)
+
 
 

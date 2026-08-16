@@ -36,4 +36,90 @@ console.log(filteredEmployees);
 console.log(projected[0].salary)
 
 
+for (let i = 0; i < highEarners.length; i++) {
+    console.log(highEarners[i].name);
+}
+
+for (const person of highEarners) {
+    console.log(person.name);
+}
+
+Math.round(projected[0].salary);
+console.log(Math.max(employees[0].salary,employees[1].salary));
+window.status = "All systems operational";
+
+
+
+let taxi = {
+    make: 'Toyota',
+    model: 'Camry',
+    year: 2020,
+    color: 'blue',
+    mileage: 15000,
+    isAvailable: true,
+    farePerMile: 2.5,
+    driver: {
+        name: 'John Doe',
+        licenseNumber: 'D1234567',
+        rating: 4.8
+    },
+    startRide: function() {
+        console.log('Ride started');
+    },
+    endRide: function() {
+        console.log('Ride ended');
+    }
+}
+
+
+console.log(taxi.driver.name);
+
+taxi.driver.name = 'Jane Smith';
+
+console.log(taxi.driver.name);
+
+
+let animal = {
+    constructor:function(species) {
+        this.species = species;
+    }
+}
+
+
+const animalList = [
+    new animal.constructor('Dog'),
+    new animal.constructor('Cat'),
+    new animal.constructor('Bird')
+]
+
+
+animalList[0].roof = function() {
+    console.log('This animal has a roof');
+}
+
+animalList[1].meow = function(){
+    console.log('Meow');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for (let i = 0; i < animalList.length; i++) {
+    console.log(animalList[i]);
+}
+
+for (const animalName of animalList) {
+    console.log(animalName);
+}
 

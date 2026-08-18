@@ -95,6 +95,19 @@ class Employee {
         this.state = state;
     }
 
+
+    calculateTax() {
+        return new Promise ((resolve,reject) => {
+            execFile('python3', ['worker/calculate_tax.py', String(this.salary), String(this.state)], (error, output) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(JSON.parse(output));
+                }
+            });
+        });
+    }
+
 }
 
 

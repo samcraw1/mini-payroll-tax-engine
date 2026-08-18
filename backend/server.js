@@ -110,5 +110,19 @@ class Employee {
 
 }
 
+app.put('/api/employees/:id', (request, response) => {
+    const employeeId = request.params.id;
+
+    db.query('select * from employees where id = ?', [employeeId], (error, results) => {
+        if (error) {
+            return response.status(500).json({ error: error.message });
+        } else {
+            response.status(201).json({ message: 'employee updated' });
+        }
+    });
+});
+
+
+
 
 

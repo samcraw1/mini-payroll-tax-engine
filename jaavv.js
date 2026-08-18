@@ -4,8 +4,23 @@ const employees = [
     {id: 103, name: 'Alice Johnson', position: 'UX Designer', salary: 70000},
     {id: 104, name: 'Bob Brown', position: 'Data Scientist', salary: 120000}
 ]
+console.log(Math.max(...employees.map(emp => emp.salary)));
+
+console.log(Math.min(...employees.map(emp => emp.salary)));
+
+console.log((employees.map( emp => Math.round(emp.salary))));
+
+const randomEmployee = employees[Math.floor(Math.random() * employees.length)];
+
+console.log(randomEmployee);
 
 
+employees.reduce((total, emp) => total + emp.salary, 0);
+
+employees.reduce((highest, emp) => emp.salary > highest.salary ? emp : highest, employees[0]);
+
+
+    
 const projected = employees.map(emp => {
     const projectedSalary = emp.salary * 1.05;
     return {
@@ -153,6 +168,46 @@ console.log('Server running at http://localhost:3000/');
 
 
 
+
+arr = [10,20,30]
+
+var filter = function(arr, fn) {
+    let newArr = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        newArr.push(arr[i])
+    }
+}
+
+arr = [1,2,3]
+
+const newArray = map(arr, plusOne);
+
+var map = function(arr, fn){
+    let newArr = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        newArr.push(fn(arr[i], i));
+    }
+    return newArr;
+}
+
+
+const newtab = window.open('https://www.google.com', '_blank');
+
+arr = [1,2,3]
+
+function fn(x, y) {
+    return x,y;
+}   
+
+
+var sortBy = function(arr, fn) {
+let sortedArr = [...arr];
+
+sortedArr.sort((a, b) => fn(a) - fn(b));
+return sortedArr;
+}
 
 
 

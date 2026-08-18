@@ -1,5 +1,8 @@
 const employeeList = document.getElementById('employees-list');
 
+document.getElementById('status').textContent = "Welcome to the Employee Management System";
+
+console.log("Employee Management System Loaded");
 
 fetch("http://localhost:3000/api/employees")
     .then(response => response.json())
@@ -117,6 +120,12 @@ addEmployeeForm.addEventListener('submit', (event) => {
             alert('Error adding employee. please try again.');
         });
 });
+
+
+
+
+
+
 
 
 

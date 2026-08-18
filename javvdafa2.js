@@ -36,3 +36,7 @@ app.post('/api/employees', (request, response) => {
         }
     });
 });
+
+const names = [1, 3, 5, 7, 9];
+
+names.reduce((total,num) => total + num, 0)

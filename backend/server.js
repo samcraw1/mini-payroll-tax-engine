@@ -25,6 +25,16 @@ app.get('/api/employees', (request, response) => {
   });
 });
 
+class Employee {
+    constructor(name,position,salary,state){
+        this.name = name;
+        this.position = position;
+        this.salary = salary;
+        this.state = state;
+    }
+
+}
+
 app.post('/api/calculate', (request, response) => {
     const { gross_pay } = request.body;
 

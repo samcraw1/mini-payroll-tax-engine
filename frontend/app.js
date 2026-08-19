@@ -99,9 +99,8 @@ addEmployeeForm.addEventListener('submit', (event) => {
 
     const name = document.getElementById('employee-name').value;
     const salary = document.getElementById('employee-salary').value;
-    const position = document.getElementById('employee-position').value;
     const state = document.getElementById('employee-state').value;
-    
+    const position = document.getElementById('employee-position').value;
     fetch('http://localhost:3000/api/employees', {
         method: 'POST',
         headers: {

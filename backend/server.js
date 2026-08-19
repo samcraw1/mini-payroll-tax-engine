@@ -9,8 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-    user: 'admin',
-    password: 'yourpassword',
+    user: 'root',
+    password: '',
     host: 'localhost',
     database: 'payroll',
 })
@@ -20,10 +20,11 @@ const db = mysql.createConnection({
 app.get('/api/employees', (request, response) => {
   db.query('select * from employees', (error, results) => {
     if (error) {
-        return response.status(500).json({error: error.message});
-    }
-    response.json(results);
-  });
+        const dbError = statusForDbServer(error);
+        return response.status(dbError.status).json({ error: dbError.message});
+        }
+        response.json(results);
+    });
 });
 
 
@@ -77,11 +78,12 @@ app.post('/api/chat', async (request, response) => {
 });
 
 app.post('/api/employees', (request, response) => {
-    const {name,salary,position,state} = request.body;
+    const {name,salary,state,position} = request.body;
 
-    db.query('insert into employees (name,salary,position,state) values (?,?,?,?)', [name,salary,position,state], (error, results) => {
+    db.query('insert into employees (name,salary,state,position) values (?,?,?,?)', [name,salary,state,position], (error, results) => {
         if(error){
-            return response.status(500).json({error: error.message});
+            const dbError = statusForDbServer(error);
+            return response.status(dbError.status).json({error: dbError.message});
         } else {
             response.status(201).json({message: 'Employee added successfully', employeeId: results.insertId});
         }
@@ -116,7 +118,8 @@ app.put('/api/employees/:id', async (request, response) => {
 
     db.query('select * from employees where id = ?', [employeeId], async (error, results) => {
         if (error) {
-            return response.status(500).json({ error: error.message });
+            const dbError = statusForDbServer(error);
+            return response.status(dbError.status).json({ error: dbError.message });
         } else {
             if(!results[0] || !results[0].id) {
                 return response.status(404).json({ error: 'employee not found or wrong id'});
@@ -125,14 +128,26 @@ app.put('/api/employees/:id', async (request, response) => {
             const taxes = await employee.calculateTax();
             db.query('update employees set fed_tax = ?, state_tax = ?, net_pay = ? where id = ?', [taxes.fed_tax, taxes.state_tax, taxes.net_pay, employeeId], (error, results) => {
                 if (error) {
-                    return response.status(500).json({ error: error.message });
+                    const dbError = statusForDbServer(error);
+                    return response.status(dbError.status).json({ error: dbError.message });
                 } else {
-                    return response.status(200).json({ message: 'Taxes calculated and saved', taxes: taxes });
+                    return response.json({ message: 'Employee taxes calculated and updated successfully', taxes });
                 }
             });
         }
     });
 });
+
+function statusForDbServer(error) {
+    switch (error.code) {
+        case 'ER_DUP_ENTRY':            return { status: 409, message: 'Duplicate entry error' };
+        case 'ER_BAD_FIELD_ERROR':      return { status: 400, message: 'Bad field error' };
+        case 'ER_DATA_TOO_LONG':        return { status: 400, message: 'Data too long' };
+        case 'ECONNREFUSED':            return { status: 503, message: 'Connection refused' };
+        case 'ER_ACCESS_DENIED_ERROR':  return { status: 403, message: 'Access denied' };
+        default:                        return { status: 500, message: 'Internal server error' };
+    }
+}
 
 
 

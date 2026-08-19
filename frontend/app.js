@@ -135,9 +135,26 @@ calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        body: JSON.stringify({})
+    })
+        .then(response => response.json())
+        .then(data => {
+            taxResults.innerHTML = `<p>${data.message}</p>`;
+            console.log(data);
+            if (data.taxes) {
+                taxResults.innerHTML += `<p>Taxes: ${data.taxes}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            taxResults.innerHTML = `<p>Error calculating taxes. Please try again.</p>`;
+        });
+});
 
 
-        
+
+
+
         
 
 

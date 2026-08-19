@@ -9,10 +9,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
+    user: 'admin',
+    password: 'yourpassword',
     host: 'localhost',
-    user: 'root',
-    database: 'payroll'
-});
+    database: 'payroll',
+})
 
 
 

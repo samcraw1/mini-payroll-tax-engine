@@ -98,7 +98,7 @@ class Employee {
 
     calculateTax() {
         return new Promise ((resolve,reject) => {
-            execFile('python3', ['worker/calculate_tax.py', String(this.salary), String(this.state)], (error, output) => {
+            execFile('python3', ['worker/tax_calaculator.py', String(this.salary)], (error, output) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -122,11 +122,11 @@ app.put('/api/employees/:id', async (request, response) => {
             }
             const employee = new Employee(results[0].name, results[0].position, results[0].salary, results[0].state);
             const taxes = await employee.calculateTax();
-            db.query('update employees set name = ?, position = ?, salary = ?, state = ? where id = ?', [employee.name, employee.position, employee.salary, employee.state, employeeId], (error, results) => {
+            db.query('update employees set fed_tax = ?, state_tax = ?, net_pay = ? where id = ?', [taxes.fed_tax, taxes.state_tax, taxes.net_pay, employeeId], (error, results) => {
                 if (error) {
                     return response.status(500).json({ error: error.message });
                 } else {
-                    return response.status(200).json({ message: 'Employee updated successfully' });
+                    return response.status(200).json({ message: 'Taxes calculated and saved', taxes: taxes });
                 }
             });
         }

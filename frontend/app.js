@@ -135,6 +135,9 @@ calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
         headers: {
             'Content-Type': 'application/json'
         },
+
+
+        
         
 
 

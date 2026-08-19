@@ -117,6 +117,9 @@ app.put('/api/employees/:id', (request, response) => {
         if (error) {
             return response.status(500).json({ error: error.message });
         } else {
+            if(!results[0]) {
+                return response.status(404).json({ error: 'employee not found'});
+            }
             response.status(201).json({ message: 'employee updated' });
         }
     });

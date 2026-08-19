@@ -15,7 +15,16 @@ const db = mysql.createConnection({
     database: 'payroll',
 })
 
-
+function statusForDbServer(error) {
+    switch (error.code) {
+        case 'ER_DUP_ENTRY':            return { status: 409, message: 'Duplicate entry error' };
+        case 'ER_BAD_FIELD_ERROR':      return { status: 400, message: 'Bad field error' };
+        case 'ER_DATA_TOO_LONG':        return { status: 400, message: 'Data too long' };
+        case 'ECONNREFUSED':            return { status: 503, message: 'Connection refused' };
+        case 'ER_ACCESS_DENIED_ERROR':  return { status: 403, message: 'Access denied' };
+        default:                        return { status: 500, message: 'Internal server error' };
+    }
+}
 
 app.get('/api/employees', (request, response) => {
   db.query('select * from employees', (error, results) => {
@@ -137,17 +146,6 @@ app.put('/api/employees/:id', async (request, response) => {
         }
     });
 });
-
-function statusForDbServer(error) {
-    switch (error.code) {
-        case 'ER_DUP_ENTRY':            return { status: 409, message: 'Duplicate entry error' };
-        case 'ER_BAD_FIELD_ERROR':      return { status: 400, message: 'Bad field error' };
-        case 'ER_DATA_TOO_LONG':        return { status: 400, message: 'Data too long' };
-        case 'ECONNREFUSED':            return { status: 503, message: 'Connection refused' };
-        case 'ER_ACCESS_DENIED_ERROR':  return { status: 403, message: 'Access denied' };
-        default:                        return { status: 500, message: 'Internal server error' };
-    }
-}
 
 
 

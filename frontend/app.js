@@ -121,6 +121,21 @@ addEmployeeForm.addEventListener('submit', (event) => {
         });
 });
 
+const calculateEmployeeTaxesForm = document.getElementById('calculate-employee-taxes-form');
+const taxResults = document.getElementById('tax-results');
+
+
+calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const employeeId = document.getElementById('employee-id').value;
+
+    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        
 
 
 

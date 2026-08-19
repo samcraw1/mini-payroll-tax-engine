@@ -110,17 +110,25 @@ class Employee {
 
 }
 
-app.put('/api/employees/:id', (request, response) => {
+app.put('/api/employees/:id', async (request, response) => {
     const employeeId = request.params.id;
 
-    db.query('select * from employees where id = ?', [employeeId], (error, results) => {
+    db.query('select * from employees where id = ?', [employeeId], async (error, results) => {
         if (error) {
             return response.status(500).json({ error: error.message });
         } else {
-            if(!results[0]) {
-                return response.status(404).json({ error: 'employee not found'});
+            if(!results[0] || !results[0].id) {
+                return response.status(404).json({ error: 'employee not found or wrong id'});
             }
-            response.status(201).json({ message: 'employee updated' });
+            const employee = new Employee(results[0].name, results[0].position, results[0].salary, results[0].state);
+            const taxes = await employee.calculateTax();
+            db.query('update employees set name = ?, position = ?, salary = ?, state = ? where id = ?', [employee.name, employee.position, employee.salary, employee.state, employeeId], (error, results) => {
+                if (error) {
+                    return response.status(500).json({ error: error.message });
+                } else {
+                    return response.status(200).json({ message: 'Employee updated successfully' });
+                }
+            });
         }
     });
 });

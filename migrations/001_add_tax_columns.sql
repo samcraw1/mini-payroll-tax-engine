@@ -1,0 +1,4 @@
+ALTER TABLE employees
+ADD COLUMN federal_tax DECIMAL(10,2),
+ADD COLUMN state_tax DECIMAL(10,2),
+ADD COLUMN net_pay DECIMAL(10,2);

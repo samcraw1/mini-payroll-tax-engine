@@ -175,6 +175,33 @@ updateEmployeeSalaryForm.addEventListener('submit', (event) => {
         });
 });
 
+const deleteEmployeeForm = document.getElementById('delete-employee-form');
+deleteEmployeeForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+
+    const employeeId = document.getElementById('delete-employee-id').value;
+
+    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+            
+        },
+        body: JSON.stringify({})
+
+})
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            deleteEmployeeForm.reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting employee. Please try again.');
+        });
+});
+
 
 
 

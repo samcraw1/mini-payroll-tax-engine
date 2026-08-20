@@ -167,6 +167,23 @@ app.patch('/api/employees/:id', (request, response) => {
     });
 });
 
+app.delete('/api/employees/:id', (request, response) => {
+    const employeeId = request.params.id;
+
+    db.query('delete from employees where id =?', [employeeId], (error, results)=> {
+        if (error) {
+            const dbError = statusForDbServer(error);
+            return response.status(dbError.status).json({error: dbError.message});
+        } else {
+            if(results.affectedRows === 0) {
+                return response.status(404).json({error: 'employee not found or wrong id'});
+            } else {
+                return response.json({ message: 'Employee deleted successfully' });
+            }
+        }
+    });
+});
+
 
 
 

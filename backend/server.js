@@ -22,6 +22,8 @@ function statusForDbServer(error) {
         case 'ER_DATA_TOO_LONG':        return { status: 400, message: 'Data too long' };
         case 'ECONNREFUSED':            return { status: 503, message: 'Connection refused' };
         case 'ER_ACCESS_DENIED_ERROR':  return { status: 403, message: 'Access denied' };
+        case 'ER_PARSE_ERROR':          return { status: 400, message: 'SQL parse error' };
+        case 'ER_NO_SUCH_TABLE':       return {status: 404, message: 'No such table'};
         default:                        return { status: 500, message: 'Internal server error' };
     }
 }
@@ -144,6 +146,24 @@ app.put('/api/employees/:id', async (request, response) => {
                 }
             });
         }
+    });
+});
+
+app.patch('/api/employees/:id', (request, response) => {
+    const employeeId = request.params.id;
+
+    db.query('update employees set salary = ? where id = ?', [request.body.salary, employeeId], (error, results)=> {
+        if(error) {
+            const dbError = statusForDbServer(error);
+            return response.status(dbError.status).json({error: dbError.message});
+        } else {
+            if(results.affectedRows === 0) {
+                return response.status(404).json({error: 'employee not found or wrong id'});
+            } else {
+                return response.json({ message: 'Employee salary updated successfully' });
+            }
+        }
+
     });
 });
 

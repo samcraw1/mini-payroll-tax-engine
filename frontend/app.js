@@ -150,6 +150,31 @@ calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
         });
 });
 
+const updateEmployeeSalaryForm = document.getElementById('update-employee-salary-form');
+updateEmployeeSalaryForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const employeeId = document.getElementById('update-employee-id').value;
+    const newSalary = document.getElementById('update-employee-salary').value;
+
+    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ salary: newSalary})
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            updateEmployeeSalaryForm.reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating employee salary. Please try again.');
+        });
+});
+
 
 
 

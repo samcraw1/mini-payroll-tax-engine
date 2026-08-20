@@ -24,6 +24,7 @@ function statusForDbServer(error) {
         case 'ER_ACCESS_DENIED_ERROR':  return { status: 403, message: 'Access denied' };
         case 'ER_PARSE_ERROR':          return { status: 400, message: 'SQL parse error' };
         case 'ER_NO_SUCH_TABLE':       return {status: 404, message: 'No such table'};
+        case 'ER_SERVER_ ERROR':          return { status: 500, message: 'Internal server error' };
         default:                        return { status: 500, message: 'Internal server error' };
     }
 }

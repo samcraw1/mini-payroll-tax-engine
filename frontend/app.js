@@ -6,6 +6,10 @@ console.log("Employee Management System Loaded");
 
 const API_URL = "http://localhost:3000/api";
 
+const headers = { 
+    'Content-Type': 'application/json'
+}
+
 
 function loadEmployees() {
     employeeList.innerHTML = ''; // Clear the existing employee list before loading new data
@@ -50,9 +54,7 @@ form.addEventListener('submit', (event) => {
 
     fetch(`${API_URL}/calculate`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({ gross_pay: grossPay })
     })
         .then(response => response.json())
@@ -86,9 +88,7 @@ chatForm.addEventListener('submit', (event) => {
 
     fetch(`${API_URL}/chat`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({ message: message })
     })
         .then(response => response.json())
@@ -111,9 +111,7 @@ addEmployeeForm.addEventListener('submit', (event) => {
     const position = document.getElementById('employee-position').value;
     fetch(`${API_URL}/employees`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({ name, salary, position, state })
     })
             
@@ -140,9 +138,7 @@ calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
 
     fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({})
     })
         .then(response => response.json())
@@ -168,9 +164,7 @@ updateEmployeeSalaryForm.addEventListener('submit', (event) => {
 
     fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({ salary: newSalary})
         })
         .then(response => response.json())
@@ -194,10 +188,7 @@ deleteEmployeeForm.addEventListener('submit', (event) => {
 
     fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-            
-        },
+        headers: headers,
         body: JSON.stringify({})
 
 })

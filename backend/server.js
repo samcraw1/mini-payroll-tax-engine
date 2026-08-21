@@ -126,29 +126,22 @@ class Employee {
 }
 
 app.put('/api/employees/:id', async (request, response) => {
-    const employeeId = request.params.id;
-
-    db.query('select * from employees where id = ?', [employeeId], async (error, results) => {
-        if (error) {
-            const dbError = statusForDbServer(error);
-            return response.status(dbError.status).json({ error: dbError.message });
-        } else {
+        try {
+            const [results] = await db.query('select * from employees where id = ?', [request.params.id]);
             if(!results[0] || !results[0].id) {
                 return response.status(404).json({ error: 'employee not found or wrong id'});
             }
             const employee = new Employee(results[0].name, results[0].position, results[0].salary, results[0].state);
             const taxes = await employee.calculateTax();
-            db.query('update employees set fed_tax = ?, state_tax = ?, net_pay = ? where id = ?', [taxes.fed_tax, taxes.state_tax, taxes.net_pay, employeeId], (error, results) => {
-                if (error) {
-                    const dbError = statusForDbServer(error);
-                    return response.status(dbError.status).json({ error: dbError.message });
-                } else {
-                    return response.json({ message: 'Employee taxes calculated and updated successfully', taxes });
-                }
-            });
+            await db.query('update employees set fed_tax = ?, state_tax = ?, net_pay = ? where id = ?', [taxes.fed_tax, taxes.state_tax, taxes.net_pay, request.params.id]);
+            return response.json({ message: 'Employee taxes calculated and updated successfully', taxes });
+        } catch (error) {
+            const dbError = statusForDbServer(error);
+            return response.status(dbError.status).json({ error: dbError.message });
         }
     });
-});
+
+
 
 app.patch('/api/employees/:id', (request, response) => {
     const employeeId = request.params.id;

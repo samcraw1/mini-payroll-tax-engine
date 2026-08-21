@@ -36,6 +36,7 @@ fetch(`${API_URL}/employees`)
         employeeList.appendChild(table);
     });
 }
+loadEmployees(); // Initial load of employees when the page loads
 
 
 const form = document.getElementById('calculate-form');

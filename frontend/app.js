@@ -81,10 +81,13 @@ const chatMessages = document.getElementById('chat-messages');
 chatForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const chatInput = document.getElementById('chat-input');
-    const message = chatInput.value;
-    chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
-    chatInput.value = '';
+    const p = document.createElement('p');
+    const strong = document.createElement('strong');
+    strong.textContent = 'You: ';
+    p.appendChild(strong);
+    const message = document.getElementById('chat-input').value;
+    p.appendChild(document.createTextNode(message));
+    chatMessages.appendChild(p);
 
     fetch(`${API_URL}/chat`, {
         method: 'POST',

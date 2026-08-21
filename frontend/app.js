@@ -4,7 +4,12 @@ document.getElementById('status').textContent = "Welcome to the Employee Managem
 
 console.log("Employee Management System Loaded");
 
-fetch("http://localhost:3000/api/employees")
+const API_URL = "http://localhost:3000/api";
+
+
+function loadEmployees() {
+    employeeList.innerHTML = ''; // Clear the existing employee list before loading new data
+fetch(`${API_URL}/employees`)
     .then(response => response.json())
     .then(data => {
         const table = document.createElement('table');
@@ -30,6 +35,8 @@ fetch("http://localhost:3000/api/employees")
         });
         employeeList.appendChild(table);
     });
+}
+
 
 const form = document.getElementById('calculate-form');
 const paystub = document.getElementById('paystub');
@@ -40,7 +47,7 @@ form.addEventListener('submit', (event) => {
     const grossPay = document.getElementById('gross-pay').value;
     const state = document.getElementById('state').value;
 
-    fetch('http://localhost:3000/api/calculate', {
+    fetch(`${API_URL}/calculate`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -76,7 +83,7 @@ chatForm.addEventListener('submit', (event) => {
     chatMessages.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
     chatInput.value = '';
 
-    fetch('http://localhost:3000/api/chat', {
+    fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -101,7 +108,7 @@ addEmployeeForm.addEventListener('submit', (event) => {
     const salary = document.getElementById('employee-salary').value;
     const state = document.getElementById('employee-state').value;
     const position = document.getElementById('employee-position').value;
-    fetch('http://localhost:3000/api/employees', {
+    fetch(`${API_URL}/employees`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -113,6 +120,7 @@ addEmployeeForm.addEventListener('submit', (event) => {
         .then(data => {
             alert(data.message);
             addEmployeeForm.reset();
+            loadEmployees(); // Refresh the employee list after adding a new employee
         })
         .catch(error => {
             console.error('Error:', error);
@@ -129,7 +137,7 @@ calculateEmployeeTaxesForm.addEventListener('submit', (event) => {
 
     const employeeId = document.getElementById('employee-id').value;
 
-    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+    fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -157,7 +165,7 @@ updateEmployeeSalaryForm.addEventListener('submit', (event) => {
     const employeeId = document.getElementById('update-employee-id').value;
     const newSalary = document.getElementById('update-employee-salary').value;
 
-    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+    fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -168,6 +176,7 @@ updateEmployeeSalaryForm.addEventListener('submit', (event) => {
         .then(data => {
             alert(data.message);
             updateEmployeeSalaryForm.reset();
+            loadEmployees(); // Refresh the employee list after updating salary
         })
         .catch(error => {
             console.error('Error:', error);
@@ -182,7 +191,7 @@ deleteEmployeeForm.addEventListener('submit', (event) => {
 
     const employeeId = document.getElementById('delete-employee-id').value;
 
-    fetch(`http://localhost:3000/api/employees/${employeeId}`, {
+    fetch(`${API_URL}/employees/${employeeId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -195,6 +204,7 @@ deleteEmployeeForm.addEventListener('submit', (event) => {
         .then(data => {
             alert(data.message);
             deleteEmployeeForm.reset();
+            loadEmployees(); // Refresh the employee list after deleting an employee
         })
         .catch(error => {
             console.error('Error:', error);
